@@ -15,8 +15,6 @@ library(zoo)
 library(ggplot2)
 library(dplyr)
 library(gridExtra)
-library(dplyr)
-library(igraph)
 
 
 #### DATA ####
@@ -25,7 +23,7 @@ library(igraph)
 
 # Read data from csv and excel file
 results <- read.csv("mens_results.csv")
-nominated <- read_excel("marathon_men_runners.xlsx")
+nominated <- read_excel("Qualified_athletes.xlsx",sheet = "Men")
 
 
 # Add 'sex' column to each dataset
@@ -36,6 +34,8 @@ head(results)
 head(nominated)
 
 # Clean nominated files
+
+nominated<- nominated[!is.na(nominated$QP), ]
 
 
 
@@ -70,7 +70,7 @@ results <- results %>%
 
 # Filter results based on nominated athletes
 data <- results %>%
-  filter(NAME %in% nominated$NAME)
+  filter(NAME %in% nominated$Athlete)
 
 # Filter out rows where the Numeric_ID appears only once
 data <- data %>%
@@ -98,23 +98,25 @@ athlete_race_counts <- data %>%
 
 print(mean(athlete_race_counts$Count_of_races))
 
-number_of_nominated <- n_distinct(nominated$NAME)
+number_of_nominated <- n_distinct(nominated$Athlete)
 
 print(number_of_nominated)
 uniq<-unique(data$NAME)
 
 # Find the missing athletes
-missing_athletes <- setdiff(nominated$NAME, uniq)
+missing_athletes <- setdiff(nominated$Athlete, uniq)
 print(missing_athletes)
 # 2 athletes nominated in the Olympics but not in the dataset
 # Yaseen ABDALLA never ran marathon
-# Kinzang LHAMO not even possible to find him on world athletics federation
+# Matthias KYBURZ
 
 
 
 
 #### GRAPHS ####
 
+library(dplyr)
+library(igraph)
 
 # Assuming 'data' contains the full dataset with the 'Event.Type' column
 
@@ -317,4 +319,6 @@ new_data_men <- extract_and_rename(data_men)
 
 # Saving the dataset as a CSV file
 write.csv(new_data_men, "data_men.csv", row.names = FALSE)
+
+
 
