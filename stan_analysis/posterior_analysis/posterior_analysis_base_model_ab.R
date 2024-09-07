@@ -101,7 +101,7 @@ stan_data$place_half_marathon <- matrix(as.integer(stan_data$place_half_marathon
 
 #### Load fitted stan data ####
 
-fit_ab<- readRDS("SD_w0.rds")
+fit_ab<- readRDS("fit_ab.rds")
 
 
 #### Divergences check ####
